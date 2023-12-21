@@ -1,2 +1,3 @@
 # ynab-bill-dashboard
-Dashboard to track Monthyl bills paid/unpaid using YNAB API 
+
+Dashboard to track monthly bills paid/unpaid using YNAB API
