@@ -1,64 +1,18 @@
 <script>
-  let bills = [
-    { name: "Rent", amount: "100", monthly_due_date: "1st", status: "Paid", link_to_pay: "", category: "Essential" },
-    { name: "JEA", amount: "100", monthly_due_date: "1st", status: "Paid", link_to_pay: "", category: "Essential" },
-    {
-      name: "Xfinity",
-      amount: "100",
-      monthly_due_date: "1st",
-      status: "Past Due",
-      link_to_pay: "",
-      category: "Essential",
-    },
-    {
-      name: "Car Insurance Alyssa",
-      amount: "100",
-      monthly_due_date: "1st",
-      status: "Past Due",
-      link_to_pay: "",
-      category: "Essential",
-    },
-    {
-      name: "Car Insurance Ricardo",
-      amount: "100",
-      monthly_due_date: "1st",
-      status: "Due Today",
-      link_to_pay: "",
-      category: "Essential",
-    },
-    {
-      name: "Ricardo Citibank",
-      amount: "100",
-      monthly_due_date: "1st",
-      status: "Due Today",
-      link_to_pay: "",
-      category: "Credit Cards",
-    },
-    {
-      name: "Ricardo Vystar",
-      amount: "100",
-      monthly_due_date: "1st",
-      status: "Not Due Yet",
-      link_to_pay: "",
-      category: "Credit Cards",
-    },
-    {
-      name: "Ricardo CapitalOne",
-      amount: "100",
-      monthly_due_date: "1st",
-      status: "Due Soon",
-      link_to_pay: "",
-      category: "Credit Cards",
-    },
-    {
-      name: "Ricardo Discover",
-      amount: "100",
-      monthly_due_date: "1st",
-      status: "No Amount Due",
-      link_to_pay: "",
-      category: "Credit Cards",
-    },
-  ];
+  import dayjs from "dayjs";
+  export let data;
+  const { bills, earliestDate } = data;
+
+  const dateRange = [];
+  // let dateWalker = earliestDate
+  // while (x = true) {
+
+  // }
+  const earliestMonth = dayjs(earliestDate);
+
+  console.log({ earliestMonth });
+
+  const currMonth = dayjs().format("MMMM");
 
   let billStatusStyleMap = {
     Paid: "text-bg-success border border-success-subtle border-2",
@@ -68,9 +22,41 @@
     "Not Due Yet": "text-bg-secondary border border-secondary-subtle border-2",
     "No Amount Due": "text-bg-secondary border border-secondary-subtle border-2",
   };
-
-  let categories = ["Essential", "Credit Cards"];
 </script>
+
+<div class="modal-body">
+  <form id="addBillForm" method="POST">
+    <div class="mb-3">
+      <label for="billName" class="form-label">Name</label>
+      <input type="text" class="form-control" name="name" id="billName" placeholder="Electric Bill" />
+    </div>
+    <div class="mb-3">
+      <label for="billAmount" class="form-label">Amount</label>
+      <input type="text" class="form-control" name="amount" id="billAmount" placeholder="Electric Bill" />
+    </div>
+    <div class="mb-3">
+      <label for="name" class="form-label">Monthly Due Date</label>
+      <input type="number" max="31" min="1" class="form-control" name="monthlyDueDate" id="monthly_due_date" />
+    </div>
+    <div class="mb-3">
+      <label for="category" class="form-label">Category:</label>
+      <select name="category" id="category">
+        <option value="Essential">Essential</option>
+        <option value="Credit Cards">Credit Cards</option>
+        <option value="Debt">Debt</option>
+        <option value="Subscriptions">Subscriptions</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="billURL" class="form-label">URL</label>
+      <input type="text" class="form-control" name="url" id="billUrl" placeholder="https://" aria-label="Amount" />
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+  <button type="submit" form="addBillForm" class="btn btn-primary">Save</button>
+</div>
 
 <!--  Add-Bill Modal -->
 <div
@@ -87,7 +73,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form id="addBillForm" action="POST">
+        <form id="addBillForm" method="POST">
           <div class="mb-3">
             <label for="billName" class="form-label">Name</label>
             <input type="text" class="form-control" id="billName" placeholder="Electric Bill" />
@@ -134,51 +120,48 @@
 
 <!-- App Bar -->
 <div>
-  <h1>Monthly Bill Tracker</h1>
+  <h1>{currMonth}</h1>
   <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addBillModal">Add Bill</button>
 </div>
 
-{#each categories as billCategory}
-  <h2 class="mt-5">{billCategory}</h2>
-  <hr class="border border-primary border-2" />
-  <div class="d-flex flex-wrap">
-    {#each bills as { name, amount, monthly_due_date, status, link_to_pay, category }}
-      {#if category === billCategory}
-        <div class="card m-1 {billStatusStyleMap[status]}" style="width: 18rem;">
-          <div class="card-body">
-            <div class="dropdown dropend">
-              <button
-                class="btn float-end border border-0"
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <i class="bi bi-three-dots-vertical float-end fs-5"></i>
-              </button>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" href={link_to_pay}
-                    >Pay Bill<i class="bi bi-box-arrow-up-right text-black ms-2"></i></a
-                  >
-                </li>
-                <li>
-                  <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#billModal">
-                    Mark as Paid
-                  </button>
-                </li>
-              </ul>
-            </div>
+{#each bills as { name, amount, monthly_due_date, status, link_to_pay, category }}
+  <!-- {#if category === billCategory} -->
+  <div class="card m-1 {billStatusStyleMap[status]}" style="width: 18rem;">
+    <div class="card-body">
+      <div class="dropdown dropend">
+        <button class="btn float-end border border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-three-dots-vertical float-end fs-5"></i>
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a class="dropdown-item" href={link_to_pay}
+              >Pay Bill<i class="bi bi-box-arrow-up-right text-black ms-2"></i></a
+            >
+          </li>
+          <li>
+            <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#billModal">
+              Mark as Paid
+            </button>
+          </li>
+        </ul>
+      </div>
 
-            <h5 class="card-title pt-2"><strong>{name}</strong></h5>
-            <p class="card-text">
-              ${amount} due on the {monthly_due_date}
-            </p>
-            <p class="card-text">
-              Status: {status}
-            </p>
-          </div>
-        </div>
-      {/if}
-    {/each}
+      <h5 class="card-title pt-2"><strong>{name}</strong></h5>
+      <p class="card-text">
+        ${amount} due on the {monthly_due_date}
+      </p>
+      <p class="card-text">
+        Status: {status}
+      </p>
+    </div>
   </div>
+  <!-- {/if} -->
 {/each}
+
+<!-- how to control what to show fro easiliest month?
+
+Once a bill is created it shows for all months
+when a bill is delete it deletes for all months
+
+Set starting month setting in db
+set month created setting for each bill  -->
