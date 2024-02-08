@@ -1,0 +1,84 @@
+<script>
+  export let data;
+  const { bills, earliestDate } = data;
+  let billStatusStyleMap = {
+    Paid: "text-bg-success border border-success-subtle border-2",
+    "Past Due": "text-bg-danger  border border-danger-subtle border-2",
+    "Due Today": "text-bg-danger border border-danger-subtle border-2",
+    "Due Soon": "text-bg-warning border border-warning-subtle border-2",
+    "Not Due Yet": "text-bg-secondary border border-secondary-subtle border-2",
+    "No Amount Due": "text-bg-secondary border border-secondary-subtle border-2",
+  };
+</script>
+
+<div>
+  <h1>Bills</h1>
+  <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addBillModal">Add Bill</button>
+</div>
+<div class="modal-body">
+  <form id="addBillForm" method="POST">
+    <div class="mb-3">
+      <label for="billName" class="form-label">Name</label>
+      <input type="text" class="form-control" name="name" id="billName" placeholder="Electric Bill" />
+    </div>
+    <div class="mb-3">
+      <label for="billAmount" class="form-label">Amount</label>
+      <input type="text" class="form-control" name="amount" id="billAmount" placeholder="Electric Bill" />
+    </div>
+    <div class="mb-3">
+      <label for="name" class="form-label">Monthly Due Date</label>
+      <input type="number" max="31" min="1" class="form-control" name="monthlyDueDate" id="monthly_due_date" />
+    </div>
+    <div class="mb-3">
+      <label for="category" class="form-label">Category:</label>
+      <select name="category" id="category">
+        <option value="Essential">Essential</option>
+        <option value="Credit Cards">Credit Cards</option>
+        <option value="Debt">Debt</option>
+        <option value="Subscriptions">Subscriptions</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="billURL" class="form-label">URL</label>
+      <input type="text" class="form-control" name="url" id="billUrl" placeholder="https://" aria-label="Amount" />
+    </div>
+  </form>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <button type="submit" form="addBillForm" class="btn btn-primary">Save</button>
+  </div>
+</div>
+
+{#each bills as { name, amount, monthly_due_date, status, link_to_pay, category }}
+  <!-- {#if category === billCategory} -->
+  <div class="card m-1 {billStatusStyleMap[status]}" style="width: 18rem;">
+    <div class="card-body">
+      <div class="dropdown dropend">
+        <button class="btn float-end border border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-three-dots-vertical float-end fs-5"></i>
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a class="dropdown-item" href={link_to_pay}
+              >Pay Bill<i class="bi bi-box-arrow-up-right text-black ms-2"></i></a
+            >
+          </li>
+          <li>
+            <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#billModal">
+              Mark as Paid
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <h5 class="card-title pt-2"><strong>{name}</strong></h5>
+      <p class="card-text">
+        ${amount} due on the {monthly_due_date}
+      </p>
+      <p class="card-text">
+        Status: {status}
+      </p>
+    </div>
+  </div>
+  <!-- {/if} -->
+{/each}
