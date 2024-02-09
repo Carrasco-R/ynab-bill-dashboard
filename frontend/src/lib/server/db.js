@@ -9,6 +9,11 @@ export function getSettings(settingKey) {
   res = db.prepare("SELECT * FROM settings WHERE meta_key = ?").all(settingKey);
   return res;
 }
+export function deleteSetting(id) {
+  let res = [];
+  res = db.prepare("DELETE FROM settings WHERE id = ?").run(id);
+  return res;
+}
 
 export function addBill(billObj) {
   db.prepare("INSERT INTO bill_config (name, amount, monthly_due_date, category, url) VALUES(?,?,?,?,?)").run(

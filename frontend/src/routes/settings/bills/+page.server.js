@@ -1,4 +1,4 @@
-import { addBill, getBills } from "$lib/server/db";
+import { addBill, getBills, getSettings } from "$lib/server/db";
 
 /** @type {import('./$types').Actions} */
 export const actions = {
@@ -20,6 +20,9 @@ export const actions = {
 };
 
 /** @type {import('./$types').PageServerLoad} */
-export async function load({ params }) {
-  return { bills: getBills() };
+export async function load() {
+  const bills = getBills();
+  const categories = getSettings("categories").map((e) => e["meta_value"]);
+  console.log({ categories });
+  return { bills, categories };
 }
