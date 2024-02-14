@@ -1,6 +1,7 @@
 <script>
   export let data;
   const { bills, categories } = data;
+  console.log({ bills });
   const billStatusStyleMap = {
     Paid: "text-bg-success border border-success-subtle border-2",
     "Past Due": "text-bg-danger  border border-danger-subtle border-2",
@@ -19,17 +20,11 @@
 </div>
 
 <!-- Add Bill Modal -->
-<div
-  class="modal fade text-black"
-  id="addBillModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade text-black" id="addBillModal" tabindex="-1" aria-labelledby="addBillModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Add a Bill</h1>
+        <h1 class="modal-title fs-5" id="addBillModal">Add a Bill</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -85,9 +80,9 @@
     <h1>{billCategory}</h1>
     <hr />
     <div class="d-flex flex-wrap">
-      {#each bills as { name, amount, monthly_due_date, status, link_to_pay, category }}
+      {#each bills as { id, name, amount, monthly_due_date, category, url }}
         {#if category === billCategory}
-          <div class="card m-1 {billStatusStyleMap[status]}" style="width: 18rem;">
+          <div class="card m-1" style="width: 18rem;">
             <div class="card-body">
               <div class="dropdown dropend">
                 <button
@@ -100,9 +95,9 @@
                 </button>
                 <ul class="dropdown-menu">
                   <li>
-                    <a class="dropdown-item" href={link_to_pay}
-                      >Pay Bill<i class="bi bi-box-arrow-up-right text-black ms-2"></i></a
-                    >
+                    <a class="dropdown-item" rel="external" href="https://{url}">
+                      Pay Bill<i class="bi bi-box-arrow-up-right text-black ms-2"></i>
+                    </a>
                   </li>
                   <li>
                     <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#billModal">

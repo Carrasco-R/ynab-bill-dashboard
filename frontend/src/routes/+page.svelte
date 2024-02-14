@@ -30,12 +30,6 @@
   </div>
 </div>
 
-<!-- App Bar -->
-<div>
-  <!-- <h1>{currMonth}</h1> -->
-  <a href="/settings">Settings</a>
-</div>
-
 <!-- how to control what to show fro easiliest month?
 
 Once a bill is created it shows for all months
