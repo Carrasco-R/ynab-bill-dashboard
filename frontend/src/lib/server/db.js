@@ -15,6 +15,15 @@ export function deleteSetting(id) {
   return res;
 }
 
+export function deleteCategory(categoryId, category) {
+  let res = false;
+  let query = db.prepare("SELECT id FROM bill_config WHERE category = ?").all(category);
+  if (query.length === 0) {
+    res = db.prepare("DELETE FROM settings WHERE id = ?").run(categoryId);
+  }
+  return res;
+}
+
 export function addBill(billObj) {
   db.prepare("INSERT INTO bill_config (name, amount, monthly_due_date, category, url) VALUES(?,?,?,?,?)").run(
     billObj["name"],

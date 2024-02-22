@@ -1,15 +1,17 @@
 <script>
+  import { invalidateAll } from "$app/navigation";
   export let data;
-  const { categories } = data;
 
-  async function deleteCategory(id) {
-    const body = { id: id };
-    await fetch("/settings/categories", {
+  $: ({ categories } = data);
+
+  async function deleteCategory(id, category) {
+    const body = { id, category };
+    const res = await fetch("/settings/categories", {
       method: "DELETE",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(body),
     });
-    location.reload();
+    invalidateAll();
   }
 </script>
 
@@ -25,7 +27,7 @@
     {#each categories as { id, meta_value }}
       <ul class="list-group list-group-horizontal-sm">
         <button
-          on:click={() => deleteCategory(id)}
+          on:click={() => deleteCategory(id, meta_value)}
           class="list-group-item list-group-item-action list-group-item-danger w-auto"
         >
           <i class="bi bi-trash"></i>
