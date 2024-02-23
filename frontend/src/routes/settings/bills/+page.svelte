@@ -1,7 +1,8 @@
 <script>
+  import BillCard from "$lib/components/BillCard.svelte";
+
   export let data;
   const { bills, categories } = data;
-  console.log({ bills });
   const billStatusStyleMap = {
     Paid: "text-bg-success border border-success-subtle border-2",
     "Past Due": "text-bg-danger  border border-danger-subtle border-2",
@@ -80,39 +81,9 @@
     <h1>{billCategory}</h1>
     <hr />
     <div class="d-flex flex-wrap">
-      {#each bills as { id, name, amount, monthly_due_date, category, url }}
-        {#if category === billCategory}
-          <div class="card m-1" style="width: 18rem;">
-            <div class="card-body">
-              <div class="dropdown dropend">
-                <button
-                  class="btn float-end border border-0"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <i class="bi bi-three-dots-vertical float-end fs-5"></i>
-                </button>
-                <ul class="dropdown-menu">
-                  <li>
-                    <a class="dropdown-item" rel="external" href="https://{url}">
-                      Pay Bill<i class="bi bi-box-arrow-up-right text-black ms-2"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#billModal">
-                      Mark as Paid
-                    </button>
-                  </li>
-                </ul>
-              </div>
-
-              <h5 class="card-title pt-2"><strong>{name}</strong></h5>
-              <p class="card-text">
-                ${amount} due on the {monthly_due_date}{numberPostfix[monthly_due_date % 10]}
-              </p>
-            </div>
-          </div>
+      {#each bills as bill}
+        {#if bill.category === billCategory}
+          <BillCard {bill}></BillCard>
         {/if}
       {/each}
     </div>

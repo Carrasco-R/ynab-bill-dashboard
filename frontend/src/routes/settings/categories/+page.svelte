@@ -12,6 +12,7 @@
       body: JSON.stringify(body),
     });
     invalidateAll();
+    if (!res.ok) alert("Cannot Delete. Bills with this category exist");
   }
 </script>
 
